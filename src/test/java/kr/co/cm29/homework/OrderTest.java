@@ -14,6 +14,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -35,7 +38,7 @@ public class OrderTest {
     }
 
     @Test
-    public void orderTest() {
+    public void orderTest() throws InterruptedException {
         Product product = productService.getProductAll().stream().findFirst().get();
 
         HashMap<Product, Integer> basket = new HashMap<>();
@@ -48,7 +51,7 @@ public class OrderTest {
     }
 
     @Test
-    public void orderSoldOutTest() {
+    public void orderSoldOutTest() throws InterruptedException {
         Product product = productService.getProductAll().stream().findFirst().get();
 
         HashMap<Product, Integer> basket = new HashMap<>();
@@ -62,38 +65,22 @@ public class OrderTest {
 
     @Test
     public void thread() throws InterruptedException {
-        int[] quantity = {1, 1000, 50};
+        int[] quantity = {1, 1000 };
 
-//        Thread thread = new Thread(() -> {
-//            Product product = productService.getProductAll().stream().findFirst().get();
-//
-//            HashMap<Product, Integer> basket = new HashMap<>();
-//
-//            orderService.order(basket, product, quantity[0]);
-//
-//            Basket repoBasket = basketRepository.findByProductId(product.getId()).get();
-//
-//            System.out.println(repoBasket.getProductId());
-//        });
-//
-//        thread.start();
+//        CountDownLatch cl = new CountDownLatch(3);
 
-//        for (int i = 0; i < 2; i++) {
-//            List<Product> products = productService.getProductAll();
-//
-//            HashMap<Product, Integer> basket = new HashMap<>();
-//
-//            orderService.order(basket, products.get(i), quantity[i]);
-//
-//            Basket repoBasket = basketRepository.findByProductId(products.get(i).getId()).orElse(null);
-//
-//
-//        }
-//
-//        Thread.sleep(3*1000);
-//
-//        System.out.println("Thread 종료");
+        for (int i = 0; i < 2; i++) {
+            List<Product> products = productService.getProductAll();
 
+            HashMap<Product, Integer> basket = new HashMap<>();
+
+            orderService.order(basket, products.get(i), quantity[i]);
+
+            Basket repoBasket = basketRepository.findByProductId(products.get(i).getId()).orElse(null);
+
+            assert i ==1 ? repoBasket == null : repoBasket.getProductId() == products.get(0).getId();
+        }
+
+        Thread.sleep(3*1000);
     }
-
 }

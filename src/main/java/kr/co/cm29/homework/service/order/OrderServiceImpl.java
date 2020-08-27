@@ -9,9 +9,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 
 @Slf4j
 @Service
@@ -25,7 +25,7 @@ public class OrderServiceImpl implements OrderService {
     private static HashMap<Product, Integer> basket;
 
     @Override
-    public void order() throws IOException {
+    public void order() {
         basket = new HashMap<>();
         System.out.print("입력(o[order]: 주문, q[quit]: 종료) : ");
 //        new Scanner(String.valueOf(System.in.available()));
@@ -148,4 +148,5 @@ public class OrderServiceImpl implements OrderService {
 
         return true;
     }
+
 }

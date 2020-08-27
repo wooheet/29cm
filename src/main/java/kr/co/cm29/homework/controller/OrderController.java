@@ -17,7 +17,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @EventListener(ApplicationReadyEvent.class)
-    public void order() throws IOException {
+    public void order() throws IOException, InterruptedException {
         orderService.order();
     }
 }
