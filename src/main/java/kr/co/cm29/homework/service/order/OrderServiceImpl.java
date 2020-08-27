@@ -48,41 +48,47 @@ public class OrderServiceImpl implements OrderService {
                         continue;
                 }
 
-                Product selectProduct = productService.getProduct(Long.parseLong(prodNum));
-
                 System.out.print("수량: ");
                 String quantity = scanner.nextLine();
 
-                if (basket.containsKey(selectProduct)) {
-                    int temQuantity = basket.get(selectProduct);
-                    int insertQuantity = Integer.parseInt(quantity) + temQuantity;
+                Product selectProduct = productService.getProduct(Long.parseLong(prodNum));
 
-                    insertBasket(selectProduct, insertQuantity);
-                }
-
-                insertBasket(selectProduct, Integer.parseInt(quantity));
+                order(basket, selectProduct, Integer.parseInt(quantity));
             }
         } else if (selectOder.equals("q") || selectOder.equals("quit")){
             System.out.println("고객님의 주문 감사합니다.");
         } else {
             System.out.println("o 또는 q를 입력해주세요.");
-            System.exit(0);
         }
 
         scanner.close();
+    }
+
+    @Override
+    public void order(HashMap<Product, Integer> basket, Product product, int quantity) {
+        if (basket.containsKey(product)) {
+            int temQuantity = basket.get(product);
+            int insertQuantity = quantity + temQuantity;
+
+            insertBasket(basket, product, insertQuantity);
+        } else {
+            insertBasket(basket, product, quantity);
+        }
     }
 
     private boolean quantityValidate(Product product, int insertQuantity) {
         return product.getAvailableStock() >= insertQuantity;
     }
 
-    private void insertBasket(Product product, int quantity) {
+    private void insertBasket(HashMap<Product, Integer> basket, Product product, int quantity) {
         basket.put(product, quantity);
 
-        basketRepository.save(Basket.builder()
-                .productId(product.getId())
-                .quantity(quantity)
-                .build());
+        if (quantityValidate(product, quantity)) {
+            basketRepository.save(Basket.builder()
+                    .productId(product.getId())
+                    .quantity(quantity)
+                    .build());
+        }
     }
 
     private double calPayment(double price, int quantity) {

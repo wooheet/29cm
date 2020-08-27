@@ -11,24 +11,22 @@
  Spring Data Jpa
  Gradle
  lombok
- MySql / h2Database
+ MySql / h2
 ````
 
 ### <a name="chapter-2"></a>How to Run
 ```
 Profile
-- dev(MySql), none(h2)
-
-1. 실행
-./gradlew bootrun
+- none(h2), dev(MySql) 
 
 # Using IntelliJ
 1. Sync gradle
 2. Run Application
 
-2. Test 
-./gradlew test
+# test
+1. @EventListener(ApplicationReadyEvent.class) -> ignore
+2. test run
 
-3. MySql Database ddl
+# MySql Database ddl
 ./scripts/database
 ```
