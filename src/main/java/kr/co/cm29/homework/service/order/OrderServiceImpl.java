@@ -81,13 +81,14 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void insertBasket(HashMap<Product, Integer> basket, Product product, int quantity) {
-        basket.put(product, quantity);
-
         if (quantityValidate(product, quantity)) {
+            basket.put(product, quantity);
             basketRepository.save(Basket.builder()
                     .productId(product.getId())
                     .quantity(quantity)
                     .build());
+        } else {
+            System.out.println("SoldOutException 발생. 주무한 상품량이 재고량보다 큽니다. ");
         }
     }
 

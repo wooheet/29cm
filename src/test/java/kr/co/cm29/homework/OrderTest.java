@@ -1,6 +1,5 @@
 package kr.co.cm29.homework;
 
-import com.galenframework.TestRunnable;
 import kr.co.cm29.homework.domain.Basket;
 import kr.co.cm29.homework.domain.Product;
 import kr.co.cm29.homework.repository.BasketRepository;
@@ -15,8 +14,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
 
 @SpringBootTest
 @RunWith(SpringJUnit4ClassRunner.class)
